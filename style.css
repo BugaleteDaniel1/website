@@ -28,7 +28,7 @@ body{
     width: 80%;
     margin: auto;
     padding: 2rem 0.5rem;
-    z-index: 2;
+    z-index: 9999;
 
 }
 .line1,.line2{
@@ -116,11 +116,12 @@ body{
     align-items: center;
     z-index: 1;
     opacity: 1;
-    clip-path: circle(25px at 100% 20%);
-    -webkit-clip-path: circle(25px at 100% 20%);
+    clip-path: circle(25px at 100% -10%);
+    -webkit-clip-path: circle(25px at 100% -10%);
 }
 .burger{
     cursor: pointer;
+    z-index: 999;
 
 }
 .nav-links{
