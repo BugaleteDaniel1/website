@@ -20,7 +20,7 @@ function animatedSlide(){
     slideTl.fromTo(revealImg, {x:'0%'}, {x:'100%'});
     slideTl.fromTo(img, {scale: 2}, {scale: 1},'-=1');
     slideTl.fromTo(revealText, {x:'0%'}, {x:'100%'}, '-=0.75');
-    slideTl.fromTo(nav, {y:'-100%'}, {y:'0%'}, '-=0.5');
+    // slideTl.fromTo(nav, {scale:'0'}, {scale:'1'}, '-=0.5');
 
     //create a scene make sure thats inside the forEach loop
     slideScene = new ScrollMagic.Scene({
@@ -91,14 +91,14 @@ function navToggle(e) {
         e.target.classList.add('active')
         gsap.to('.line1', 0.5, { rotate:'45', y:  5, background: 'black', zIndex: '100' } )
         gsap.to('.line2', 0.5, { rotate:'-45', y:-5, background: 'black', zIndex: '100' } )
-        gsap.to('.nav-bar', 2, { clipPath: 'circle(2500px at 100% -10%)' } )
+        gsap.to('.nav-bar', 1, { clipPath: 'circle(2500px at 100% -10%)' } )
         gsap.to('#logo',1, {color:'black'})
         document.body.classList.add('hide')
     }else{
         e.target.classList.remove('active')
         gsap.to('.line1', 0.5, { rotate:'0', y: 0, background: 'white', } )
         gsap.to('.line2', 0.5, { rotate:'0', y: 0, background: 'white', } )
-        gsap.to('.nav-bar', 2, { clipPath: 'circle(25px at 100% -10%)' } )
+        gsap.to('.nav-bar', 0.5, { clipPath: 'circle(25px at 100% -10%)' } )
         gsap.to('#logo',1, {color:'white'})
         document.body.classList.remove('hide')
     }
