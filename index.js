@@ -20,14 +20,13 @@ function animatedSlide(){
     slideTl.fromTo(revealImg, {x:'0%'}, {x:'100%'});
     slideTl.fromTo(img, {scale: 2}, {scale: 1},'-=1');
     slideTl.fromTo(revealText, {x:'0%'}, {x:'100%'}, '-=0.75');
-    // slideTl.fromTo(nav, {scale:'0'}, {scale:'1'}, '-=0.5');
+    slideTl.fromTo(nav, {opacity:0}, {opacity:1}, '-=0.5');
 
     //create a scene make sure thats inside the forEach loop
     slideScene = new ScrollMagic.Scene({
         triggerElement: slide,
         triggerHook: 0.3,
         reverse:false
-
     })
     .setTween(slideTl)
     // .addIndicators({
@@ -104,8 +103,61 @@ function navToggle(e) {
     }
 }
 
+
+const logo = document.querySelector('#logo');
+// Barba page transition
+barba.init({
+    views:[
+        {
+            namespace: "home",
+            beforeEnter() {
+                animatedSlide();
+                logo.href = './index.html'
+            },
+            beforeLeave() {
+                slideScene.destroy();
+                pageScene.destroy();
+                controller.destroy();
+            }
+        },
+        {
+            namespace: "fashion",
+            beforeEnter(){
+                logo.href = '../index.html'
+            }
+        }
+    ],
+    transitions: [
+        {
+            leave({current,next}){
+                let done = this.async();
+                // animation
+                const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
+                tl.fromTo(current.container, 1, { opacity:1 }, { opacity:0 });
+                tl.fromTo('.swipe', 0.75, 
+                {x: '-100%'},
+                {x: '0%', onComplete: done},
+                '-=0.5'
+                );
+            },
+            enter({current,next}) {
+                let done = this.async();
+                //scroll to the top
+                window.scrollTo(0,0)
+                // animation
+                const tl = gsap.timeline({defaults: {ease: "power2.inOut"} });
+                tl.fromTo('.swipe', 
+                    1, 
+                    {x: '0%'},
+                    {x: '100%',stagger:0.25, onComplete: done});
+                tl.fromTo(next.container, 1, { opacity:0 }, { opacity:1 });
+            }
+        }
+    ]
+})
+
+
 // event listeners
 burger.addEventListener('click', navToggle)
 window.addEventListener('mousemove', cursor);
 window.addEventListener('mouseover', activeCursor)
-animatedSlide();
