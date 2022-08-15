@@ -1,6 +1,7 @@
 let controller;
 let slideScene;
-let pageScene
+let pageScene;
+let detailScene;
 
 function animatedSlide(){
     //init controller
@@ -20,7 +21,7 @@ function animatedSlide(){
     slideTl.fromTo(revealImg, {x:'0%'}, {x:'100%'});
     slideTl.fromTo(img, {scale: 2}, {scale: 1},'-=1');
     slideTl.fromTo(revealText, {x:'0%'}, {x:'100%'}, '-=0.75');
-    slideTl.fromTo(nav, {opacity:0}, {opacity:1}, '-=0.5');
+    
 
     //create a scene make sure thats inside the forEach loop
     slideScene = new ScrollMagic.Scene({
@@ -123,7 +124,12 @@ barba.init({
         {
             namespace: "fashion",
             beforeEnter(){
-                logo.href = '../index.html'
+                logo.href = '../index.html';
+                detailedAnimation();
+            },
+            beforeLeave() {
+                controller.destroy();
+                detailScene.destroy();
             }
         }
     ],
@@ -142,7 +148,7 @@ barba.init({
             },
             enter({current,next}) {
                 let done = this.async();
-                //scroll to the top
+                // scroll to the top
                 window.scrollTo(0,0)
                 // animation
                 const tl = gsap.timeline({defaults: {ease: "power2.inOut"} });
@@ -155,9 +161,34 @@ barba.init({
         }
     ]
 })
+function detailedAnimation() {
+    controller = new ScrollMagic.Controller();
+    const slides = document.querySelectorAll('.detail-slide');
+    slides.forEach((slide,index,slides) => {
+        const slideTl = gsap.timeline({defaults: {duration:1}} );
+        let nextSlide = slides.length - 1 === index ? 'end' : slides[index + 1];
+        const nextImg = nextSlide.querySelector('img');
 
+        slideTl.fromTo(slide, {opacity:1}, {opacity:0} );
+        slideTl.fromTo(nextSlide, {opacity: 0}, {opacity:1}, '-=1');
+        // slideTl.fromTo(nextImg, {x:'50%'}, {x:'0%'});
+        //Scene
+        detailScene = new ScrollMagic.Scene({
+            triggerElement:slide,
+            duration: '100%',
+            triggerHook: 0
+        }).setPin(slide, {pushFollowers:false})
+        // .addIndicators({
+        //     colorStart:'white', 
+        //     colorTrigger:'white', 
+        //     name:'slide'
+        // })
+        .setTween(slideTl)
+        .addTo(controller);
+    })
+}
 
 // event listeners
-burger.addEventListener('click', navToggle)
+burger.addEventListener('click', navToggle);
 window.addEventListener('mousemove', cursor);
-window.addEventListener('mouseover', activeCursor)
+window.addEventListener('mouseover', activeCursor);
