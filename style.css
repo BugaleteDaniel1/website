@@ -371,3 +371,7 @@ main{
         text-align: center;
     }
 }
+
+.undone{
+    cursor: not-allowed;
+}
